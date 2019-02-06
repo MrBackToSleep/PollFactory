@@ -1,0 +1,33 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Poll{% endblock %}
+
+{% block body %}
+    <h3>Sondage</h3>
+    <h5>Créé par {{poll.user.username}} le {{ poll.creationDate|date('d/m/Y') }}</h5>
+    <hr/>
+
+    <h4>{{ poll.title }}</h4>
+    {% if pollVote | length < 1 %}
+        {{ form(form) }}
+    {% endif %}
+
+    <hr/>
+    <h5>Résultats</h5>
+    
+    {% if nbVote >= 1 %}
+    {% for option in poll.pollOptions %}
+    
+    <h6>{{ option.name }}</h6>
+    <div class="progress">
+        {% set pourcent = "0" %}
+        {% if poll.pollVotes.count != 0 %}
+            {% set pourcent = option.pollVotes | length / poll.pollVotes | length * 100 %}
+        {% endif %}
+        <div class="progress-bar" role="progressbar" style="width:{{ pourcent }}%">{{ pourcent | round(2, 'floor') }}%</div>
+    </div>
+    {% endfor %}
+    {% else %}
+        <div><p>Vous ne pouvez pas voir les résultats avant d'avoir voté</p></div>
+    {% endif %}
+{% endblock %}

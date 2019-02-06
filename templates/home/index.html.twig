@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="jumbotron">
+    <h3>Bienvenue!</h3>
+    <p>
+    Vous pourrez ici réaliser vos sondages
+    </p>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') == false %}
+    <p>
+        <a class="btn btn-primary" href="{{ path('app_register') }}">Inscription &raquo;</a>
+        <a class="btn btn-primary" href="{{ path('app_login') }}">Connexion &raquo;</a>
+    </p>
+    {% endif %}
+    <div class="recents_polls">
+        <h4>Les sondages les plus récents</h4>
+        <table class="table">
+        <thead>
+            <tr>
+                <th>Titre</th>
+                <th>Date de création</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for poll in polls %}
+            <tr>
+                <td>
+                    <a href="{{ path('poll_show', {'id': poll.id}) }}">
+                    {{ poll.title }}
+                    </a>
+                </td>
+                <td>{{ poll.creationDate ? poll.creationDate|date('d/m/Y H:i:s') : '' }}</td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">Aucun sondage</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+</div>
+{% endblock %}
